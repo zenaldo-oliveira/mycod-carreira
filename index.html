@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MyCod Carreira — prévia</title>
+<style>
+:root{
+  --bg:#0c0c12; --panel:#15151f; --panel2:#1b1b28; --line:#262636; --line2:#33334a;
+  --ink:#f2f2f8; --muted:#9d9db4; --purple:#6c5ce7; --purple-hi:#a59bff; --purple-soft:rgba(108,92,231,.14);
+  --ok:#5be0a0; --warn:#fbbf24; --err:#fca5a5;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5;min-height:100vh}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 20px;border-bottom:1px solid var(--line)}
+.brand{font-weight:700;font-size:16px;letter-spacing:-.01em}
+.brand span{color:var(--purple-hi)}
+.nav{display:flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:4px}
+.nav button{background:transparent;color:var(--muted);border:0;border-radius:999px;padding:6px 14px;font:inherit;font-size:14px;cursor:pointer}
+.nav button[aria-selected="true"]{background:var(--purple);color:#fff}
+main{max-width:720px;margin:0 auto;padding:28px 18px 56px}
+h1{font-size:clamp(26px,5vw,34px);line-height:1.15;margin:0 0 8px;letter-spacing:-.02em;font-weight:800}
+.lead{color:var(--muted);margin:0 0 22px}
+.seg{display:inline-flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px;max-width:100%}
+.seg button{background:transparent;color:var(--muted);border:0;border-radius:9px;padding:8px 14px;font:inherit;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.seg button[aria-pressed="true"]{background:var(--panel2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line2)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:16px}
+.panel-title{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;margin:0 0 12px}
+.badge{font-size:11px;font-weight:600;color:var(--purple-hi);background:var(--purple-soft);border-radius:999px;padding:2px 9px}
+label.lbl{display:block;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:14px 0 6px;font-weight:600}
+input,textarea{width:100%;font:inherit;font-size:15px;padding:11px 13px;border:1px solid var(--line2);border-radius:11px;background:var(--panel2);color:var(--ink)}
+input::placeholder,textarea::placeholder{color:#6f6f88}
+textarea{min-height:150px;resize:vertical;line-height:1.5}
+input:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--purple-hi);outline-offset:2px}
+.drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed #5b52a8;border-radius:14px;padding:26px 16px;text-align:center;cursor:pointer;background:var(--panel2);min-height:150px}
+.drop:hover{border-color:var(--purple-hi)}
+.drop:focus-within{outline:2px solid var(--purple-hi);outline-offset:2px}
+.drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.drop-icon{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--purple-soft);color:var(--purple-hi);font-weight:700;font-size:13px}
+.drop-icon.ok{background:rgba(91,224,160,.16);color:var(--ok)}
+.drop-name{color:var(--purple-hi);font-weight:600;word-break:break-all}
+.drop-sub{color:var(--muted);font-size:13px}
+.linkbtn{background:none;border:0;color:var(--purple-hi);padding:6px 0;font:inherit;font-size:14px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.row2{grid-template-columns:1fr}.drop{padding:16px 12px;min-height:0}.drop-icon{width:36px;height:36px}.seg{width:100%}.seg button{flex:1;justify-content:center}}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.chip{background:transparent;color:var(--ink);border:1px solid var(--line2);border-radius:999px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--purple);border-color:var(--purple);color:#fff}
+details.fold{background:var(--panel);border:1px solid var(--line);border-radius:14px;margin-top:14px}
+details.fold>summary{cursor:pointer;list-style:none;padding:13px 16px;font-weight:600;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::after{content:"+";color:var(--purple-hi);font-size:18px;line-height:1}
+details.fold[open]>summary::after{content:"−"}
+.fold-body{padding:0 16px 16px}
+.btn{display:block;width:100%;margin-top:18px;background:var(--purple);color:#fff;border:0;border-radius:12px;padding:14px;font:inherit;font-size:16px;font-weight:700;cursor:pointer}
+.btn:hover{background:#7b6df0}
+.btn:disabled{opacity:.55;cursor:wait}
+.btn.ghost{background:transparent;color:var(--purple-hi);border:1px solid var(--line2);font-weight:600;font-size:14px;padding:10px;width:auto;display:inline-block;margin-top:0}
+.state{font-size:14px;padding:10px 12px;border-radius:10px;margin-top:12px}
+.state.empty{background:var(--panel2);color:var(--muted)}
+.state.err{background:rgba(252,165,165,.08);color:var(--err);border:1px solid rgba(252,165,165,.25)}
+.state.ok{background:rgba(91,224,160,.08);color:var(--ok);border:1px solid rgba(91,224,160,.25)}
+.rule-note{font-size:13px;color:var(--muted);background:var(--panel2);border-radius:10px;padding:9px 12px;margin:0 0 14px}
+.res-title{font-size:18px;font-weight:800;margin:24px 0 10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:12px}
+.prio{font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:var(--muted)}
+.prio.alta{color:var(--err)}.prio.media{color:var(--warn)}
+.small{font-size:14px;margin:8px 0}
+.hint{font-size:12px;color:var(--muted);margin-top:6px}
+blockquote{margin:6px 0;padding:8px 12px;border-left:3px solid var(--line2);color:var(--muted);font-size:14px;background:var(--panel2);white-space:pre-wrap;border-radius:0 8px 8px 0}
+pre.sug{white-space:pre-wrap;font:inherit;font-size:14px;background:var(--purple-soft);color:var(--ink);padding:10px 12px;border-radius:10px;margin:8px 0 10px}
+.copy{background:transparent;color:var(--purple-hi);border:1px solid var(--line2);border-radius:9px;padding:7px 12px;font:inherit;font-size:13px;cursor:pointer}
+ul{margin:6px 0;padding-left:20px;font-size:14px}
+.hidden{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.q{font-size:18px;font-weight:700;margin:8px 0 12px;line-height:1.35}
+.fb{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:12px}
+.formhint{font-size:12px;color:var(--warn);margin-top:6px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">MyCod <span>Carreira</span></div>
+  <nav class="nav" role="tablist" aria-label="Ferramentas">
+    <button type="button" role="tab" data-tab="linkedin" aria-selected="true">LinkedIn</button>
+    <button type="button" role="tab" data-tab="entrevista" aria-selected="false">Entrevista</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ===== VISÃO: LINKEDIN ===== -->
+  <section id="view-linkedin" aria-label="Analisador de LinkedIn">
+    <h1>Analisador de LinkedIn</h1>
+    <p class="lead">Cole o texto do seu perfil ou envie um PDF para receber sugestões.</p>
+
+    <div class="seg" role="group" aria-label="Forma de entrada">
+      <button type="button" data-mode="paste" aria-pressed="true">📋 Colar texto</button>
+      <button type="button" data-mode="pdf" aria-pressed="false">📄 Enviar PDF</button>
+    </div>
+
+    <div class="panel">
+      <!-- Modo PDF: só a área de upload -->
+      <div id="pdfPanel" class="hidden">
+        <div class="panel-title">PDF do perfil <span class="badge">Arraste ou clique</span></div>
+        <label class="drop">
+          <span id="dropIcon" class="drop-icon">PDF</span>
+          <span id="pdfName" class="drop-name">Nenhum arquivo selecionado</span>
+          <span id="pdfSub" class="drop-sub">Clique para escolher o arquivo</span>
+          <input type="file" id="pdfFile" accept="application/pdf,.pdf" aria-label="Escolher arquivo PDF">
+        </label>
+      </div>
+
+      <!-- Campo de texto: colar, ou revisar o texto extraído do PDF -->
+      <div id="reviewBlock">
+        <div class="panel-title" id="reviewTitle">Texto do perfil</div>
+        <textarea id="reviewText" aria-label="Texto do perfil" placeholder="Cole aqui o Sobre, experiências, projetos, habilidades e formação."></textarea>
+      </div>
+
+      <div class="hint" id="srcHint"></div>
+      <button type="button" class="linkbtn" id="useProfile">Usar meu perfil salvo</button>
+    </div>
+
+    <details class="fold" id="editProfileFold">
+      <summary>Editar meu perfil</summary>
+      <div class="fold-body">
+        <label class="lbl" for="p-nome">Nome</label>
+        <input id="p-nome">
+        <label class="lbl" for="p-local">Localização</label>
+        <input id="p-local">
+        <label class="lbl" for="p-formacao">Formação</label>
+        <textarea id="p-formacao" style="min-height:90px"></textarea>
+        <div class="formhint hidden" id="formHint">Pendente de confirmação: situação atual do curso de Análise e Desenvolvimento de Sistemas.</div>
+        <label class="lbl" for="p-telecom">Experiência em telecom</label>
+        <textarea id="p-telecom" style="min-height:90px"></textarea>
+        <label class="lbl" for="p-radares">Experiência em radares</label>
+        <textarea id="p-radares" style="min-height:70px"></textarea>
+        <label class="lbl" for="p-dev">Desenvolvimento</label>
+        <textarea id="p-dev" style="min-height:70px"></textarea>
+        <label class="lbl" for="p-projetos">Projetos</label>
+        <textarea id="p-projetos" style="min-height:90px"></textarea>
+        <div style="margin-top:12px"><button type="button" class="btn ghost" id="resetProfile">Restaurar perfil inicial</button></div>
+      </div>
+    </details>
+
+    <div class="row2" style="margin-top:18px">
+      <div>
+        <label class="lbl" for="targetRole">Cargo alvo (opcional)</label>
+        <input id="targetRole" placeholder="Ex.: Desenvolvedor Full Stack Júnior">
+        <div class="chips" aria-label="Sugestões de cargo">
+          <button type="button" class="chip" data-goal="fullstack" aria-pressed="true">Full Stack Júnior</button>
+          <button type="button" class="chip" data-goal="telecom" aria-pressed="false">Telecom / O&amp;M</button>
+        </div>
+      </div>
+      <div>
+        <label class="lbl" for="areaRole">Área alvo (opcional)</label>
+        <input id="areaRole" placeholder="Ex.: Desenvolvimento web">
+      </div>
+    </div>
+
+    <details class="fold">
+      <summary>Adicionar detalhes da vaga</summary>
+      <div class="fold-body">
+        <label class="lbl" for="job">Descrição da vaga</label>
+        <textarea id="job" style="min-height:110px" placeholder="Cole a descrição da vaga para comparar com o perfil analisado"></textarea>
+      </div>
+    </details>
+
+    <button type="button" class="btn" id="analyze">Analisar perfil</button>
+    <div id="state" class="state empty hidden" role="status"></div>
+
+    <div id="results"></div>
+  </section>
+
+  <!-- ===== VISÃO: ENTREVISTA ===== -->
+  <section id="view-entrevista" class="hidden" aria-label="Treino de entrevista">
+    <h1>Treino de entrevista</h1>
+    <p class="lead">Uma pergunta por vez. Escreva sua resposta e veja o que ficou claro e o que faltou comprovar.</p>
+    <div class="chips" aria-label="Objetivo da entrevista" style="margin:0 0 6px">
+      <button type="button" class="chip" data-goal="fullstack" aria-pressed="true">Full Stack Júnior</button>
+      <button type="button" class="chip" data-goal="telecom" aria-pressed="false">Telecom / O&amp;M</button>
+    </div>
+
+    <div class="panel">
+      <div class="hint" id="qCount"></div>
+      <p class="q" id="qText"></p>
+      <label class="lbl" for="answer">Sua resposta</label>
+      <textarea id="answer" style="min-height:150px" placeholder="Escreva com suas palavras. Use só fatos que você consegue comprovar."></textarea>
+      <div class="row2" style="margin-top:14px">
+        <button type="button" class="copy" id="prevQ">Anterior</button>
+        <button type="button" class="copy" id="nextQ">Próxima</button>
+      </div>
+      <button type="button" class="btn" id="finish">Concluir rodada</button>
+    </div>
+    <div id="feedback"></div>
+  </section>
+
+</main>
+
+<script>
+/* ============ DADOS INICIAIS (editáveis na tela) ============ */
+const PROFILE_DEFAULT = {
+  nome: 'Ana Exemplo Silva',
+  local: 'Cidade Exemplo, UF',
+  formacao: 'Curso técnico exemplo.\nCurso superior exemplo, com situação a confirmar.',
+  telecom: 'Atuação exemplo em O&M de redes de uma operadora fictícia, com backbone, DWDM, enlaces de rádio e manutenção preventiva e corretiva.',
+  radares: 'Manutenção exemplo de equipamentos de fiscalização eletrônica de fabricantes fictícios.',
+  dev: 'JavaScript, TypeScript, React, Next.js, Node.js e PostgreSQL.',
+  projetos: 'Projeto exemplo de site comercial.\nProjeto exemplo entregue para cliente fictício.\nProjeto de estudo exemplo com React Native.'
+};
+
+const GOALS = {
+  fullstack: {
+    label: 'Desenvolvedor Full Stack Júnior',
+    short: 'Full Stack Júnior',
+    kw: /full ?stack|desenvolvedor|react|next|node|javascript|typescript/i,
+    headline: 'Desenvolvedor Full Stack Júnior | React, Next.js, TypeScript, Node.js e PostgreSQL'
+  },
+  telecom: {
+    label: 'Técnico de Telecom / O&M',
+    short: 'Telecom / O&M',
+    kw: /telecom|o&m|dwdm|backbone|r[aá]dio|manuten/i,
+    headline: 'Técnico de Telecom O&M | Backbone, DWDM, enlaces de rádio 2G/3G/4G e manutenção preventiva e corretiva'
+  }
+};
+
+const SUG = {
+  sobre: {
+    fullstack: '[formação confirmada], com experiência em O&M de redes de operadora e na manutenção de equipamentos de fiscalização eletrônica de fabricantes exemplo. Desenvolvimento com JavaScript, TypeScript, React, Next.js, Node.js, PostgreSQL e Supabase. Busco oportunidade como Desenvolvedor Full Stack Júnior.',
+    telecom: 'Atuação em O&M de redes de operadora, com backbone, DWDM, enlaces de rádio 2G/3G/4G e manutenção preventiva e corretiva. Também atuei na manutenção de equipamentos de fiscalização eletrônica de fabricantes exemplo. Busco oportunidade como Técnico de Telecom / O&M.'
+  },
+  exp: {
+    fullstack: '[cargo] · [empresa ou projeto] · [período]\n• Entrega de [projeto] em React e Next.js: [o que o cliente recebeu].\n• Decisão técnica: [o que escolhi] e [por que escolhi].',
+    telecom: '[cargo confirmado] · [operadora] (O&M) · [período]\n• Manutenção preventiva e corretiva em redes com backbone e DWDM.\n• Manutenção de enlaces de rádio 2G/3G/4G.'
+  },
+  proj: {
+    fullstack: '[Nome do projeto] · [o que resolve] · Tecnologias: [ex.: React, Next.js, PostgreSQL] · Link: [url]',
+    telecom: 'Use esta seção só para projetos com resultado comprovável. Se não houver, deixe-a fora do perfil.'
+  },
+  metrica: {
+    fullstack: '[ação] em [projeto]: [escopo ou volume] · [período] · resultado: [métrica, ex.: tempo de carregamento, erros em produção] [confirme o número antes de publicar]',
+    telecom: '[ação] em [rede ou equipamento]: [quantidade de atendimentos ou enlaces] · [período] · resultado: [tempo de restauração ou falhas evitadas] [confirme o número antes de publicar]'
+  },
+  hab: {
+    fullstack: 'JavaScript, TypeScript, React, Next.js, Node.js, PostgreSQL, Supabase',
+    telecom: 'DWDM, backbone, enlaces de rádio, manutenção preventiva e corretiva, O&M, [equipamentos confirmados]'
+  }
+};
+
+const TERMS = ['JavaScript','TypeScript','React','Next.js','Node.js','Express','PostgreSQL','Supabase','Prisma','Docker','Git','API','REST','Vitest','Playwright','DWDM','backbone','rádio','O&M','manutenção preventiva','manutenção corretiva','Linux','Windows','SQL','inglês'];
+
+// Perguntas reforçadas com critérios de referência (planilha de atendimento anonimizada):
+// resultado com métrica, trade-off entre velocidade e qualidade, e casos não resolvidos na primeira tentativa.
+const QUESTIONS = {
+  fullstack: [
+    'Conte sobre um site que você entregou e explique uma decisão técnica que tomou.',
+    'Como você organizaria autenticação e validação de dados em uma API com Node.js e PostgreSQL?',
+    'Descreva como você investigaria um bug que aparece apenas em produção.',
+    'Como você mediria se uma entrega realmente resolveu o problema do usuário? Que métrica usaria?'
+  ],
+  telecom: [
+    'Descreva uma manutenção corretiva em campo que você conduziu. Qual foi o diagnóstico?',
+    'Como você investigaria a queda de um enlace de rádio ou de um canal DWDM?',
+    'Como você documenta e comunica uma manutenção preventiva para a equipe e para o cliente?',
+    'Descreva um caso em que o problema não foi resolvido na primeira tentativa. O que fez a seguir?'
+  ]
+};
+
+// pdf.js 3.11.174 (Apache-2.0) incluído localmente em vendor/pdfjs/ — não depende de CDN.
+const PDFJS_BASE = 'vendor/pdfjs/';
+
+/* ============ ESTADO ============ */
+let goal = 'fullstack';
+let mode = 'paste';
+let pdfReady = false;
+let qIndex = 0;
+let answers = [];
+
+/* ============ UTILITÁRIOS ============ */
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const reEscape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const termRe = (t) => new RegExp('(?<![\\p{L}\\d])' + reEscape(t) + '(?![\\p{L}\\d])', 'iu');
+
+function setState(kind, msg) {
+  const el = $('#state');
+  if (!msg) { el.className = 'state empty hidden'; el.textContent = ''; return; }
+  el.className = 'state ' + kind;
+  el.textContent = msg;
+}
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (_) {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); ta.remove();
+  }
+}
+
+/* ============ PERFIL ============ */
+const PROFILE_KEYS = ['nome','local','formacao','telecom','radares','dev','projetos'];
+
+function fillProfile(data) {
+  PROFILE_KEYS.forEach(k => { $('#p-' + k).value = data[k] || ''; });
+  updateFormHint();
+}
+function updateFormHint() {
+  $('#formHint').classList.toggle('hidden', !/confirm/i.test($('#p-formacao').value));
+}
+function readProfile() {
+  const o = {};
+  PROFILE_KEYS.forEach(k => { o[k] = $('#p-' + k).value.trim(); });
+  return o;
+}
+function profileAsText() {
+  const p = readProfile();
+  return [
+    `Nome: ${p.nome}`,
+    `Localização: ${p.local}`,
+    'Formação',
+    p.formacao,
+    'Experiência',
+    `Telecom: ${p.telecom}`,
+    `Radares: ${p.radares}`,
+    'Projetos',
+    p.projetos,
+    'Habilidades',
+    p.dev
+  ].join('\n');
+}
+
+/* ============ OBJETIVO (cargo alvo) ============ */
+function setGoal(g, fillInput) {
+  if (g !== goal) { qIndex = 0; answers = []; $('#feedback').innerHTML = ''; }
+  goal = g;
+  document.querySelectorAll('[data-goal]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.goal === g)));
+  if (fillInput) $('#targetRole').value = GOALS[g].short;
+  renderQuestion();
+}
+
+/* ============ ANÁLISE POR REGRAS ============ */
+const HDR = /^\s*(sobre|about|resumo|experi[eê]ncias?|experience|projetos?|projects|habilidades|skills|compet[eê]ncias|forma[cç][aã]o(\s+acad[eê]mica)?|education)\s*:?\s*$/i;
+
+function keyOf(line) {
+  const n = line.toLowerCase();
+  if (/sobre|about|resumo/.test(n)) return 'sobre';
+  if (/experi/.test(n)) return 'experiencia';
+  if (/proj/.test(n)) return 'projetos';
+  if (/hab|skill|compet/.test(n)) return 'habilidades';
+  return 'formacao';
+}
+
+function parseSections(text) {
+  const secs = {};
+  let cur = null, head = null;
+  for (const raw of text.split(/\r?\n/)) {
+    const line = raw.trim();
+    if (!line) continue;
+    if (HDR.test(line)) { cur = keyOf(line); secs[cur] = secs[cur] || []; continue; }
+    const t = line.match(/^(t[ií]tulo|headline)\s*:\s*(.+)$/i);
+    if (t) { head = t[2].trim(); continue; }
+    if (/^(nome|localiza[cç][aã]o)\s*:/i.test(line)) continue;
+    if (cur) secs[cur].push(line);
+    else if (!head) head = line;
+  }
+  const out = {};
+  for (const k in secs) out[k] = secs[k].join('\n');
+  return { head, secs: out };
+}
+
+function analyze(text, g) {
+  const G = GOALS[g];
+  const { head, secs } = parseSections(text);
+  const items = [];
+  const it = (prio, area, original, problem, suggestion) => ({ prio, area, original, problem, suggestion });
+
+  // Headline
+  if (!head) items.push(it('alta', 'Headline', '(ausente)', 'Sem headline. É o texto logo abaixo do nome e um dos primeiros que o recrutador lê.', G.headline));
+  else if (!G.kw.test(head)) items.push(it('alta', 'Headline', head, 'A headline não cita o objetivo escolhido.', G.headline));
+
+  // Sobre
+  if (!secs.sobre) items.push(it('alta', 'Sobre', '(ausente)', 'Sem seção Sobre. Ela resume quem você é e o que busca.', SUG.sobre[g]));
+  else if (secs.sobre.length < 200) items.push(it('media', 'Sobre', secs.sobre, 'Texto curto: pouco contexto para o leitor.', SUG.sobre[g]));
+
+  // Experiências
+  const exp = secs.experiencia || '';
+  if (!exp) items.push(it('alta', 'Experiências', '(ausente)', 'Sem seção de experiências.', SUG.exp[g]));
+  else if (g === 'telecom' && !/dwdm|backbone|r[aá]dio|preventiva|corretiva/i.test(exp))
+    items.push(it('alta', 'Experiências', exp, 'Não aparecem DWDM, backbone, rádio nem manutenção: são os termos que o leitor de O&M procura.', SUG.exp.telecom));
+  else if (g === 'fullstack' && !/react|next|node|typescript|javascript|postgres/i.test(exp))
+    items.push(it('media', 'Experiências', exp, 'Experiência sem tecnologias de desenvolvimento. Destaque o que foi entregue em software.', SUG.exp.fullstack));
+
+  // Resultados mensuráveis (critério da planilha de referência: número + período + resultado)
+  if (exp && !/\d+(?:[.,]\d+)?\s*(?:%|atendimentos|chamados|chamadas|projetos|clientes|usu[aá]rios|horas?|minutos?|min\b|segundos?|s\b|dias|meses|vezes|pessoas|sites|enlaces|falhas|ordens)/i.test(exp))
+    items.push(it('media', 'Resultados', exp.split('\n')[0], 'Nenhum resultado com número. Informe volume, período e resultado. Use [confirme] quando não tiver o dado.', SUG.metrica[g]));
+
+  // Projetos
+  const pj = secs.projetos || '';
+  if (!pj) items.push(it('alta', 'Projetos', '(ausente)', g === 'fullstack' ? 'Sem projetos. Para Full Stack Júnior, projetos entregues são a principal prova.' : 'Sem seção de projetos.', SUG.proj[g]));
+  else if (g === 'fullstack' && !/https?:|github|vercel|\.com|\.br/i.test(pj))
+    items.push(it('media', 'Projetos', pj, 'Nenhum link ou demonstração. Inclua URL quando existir.', SUG.proj.fullstack));
+
+  // Habilidades
+  const hb = secs.habilidades || '';
+  const count = hb.split(/[,;\n•·|]/).map(s => s.trim()).filter(Boolean).length;
+  if (!hb) items.push(it('media', 'Habilidades', '(ausente)', 'Sem habilidades listadas. Liste o que você domina de fato.', SUG.hab[g]));
+  else if (count < 5) items.push(it('baixa', 'Habilidades', hb, 'Poucas habilidades listadas.', SUG.hab[g]));
+
+  // Formação
+  const fm = secs.formacao || '';
+  if (!fm) items.push(it('media', 'Formação', '(ausente)', 'Sem formação. Inclua curso e instituição.', 'Análise e Desenvolvimento de Sistemas · [instituição] · [concluído em MM/AAAA ou previsão MM/AAAA]'));
+  else if (/confirm/i.test(fm)) items.push(it('alta', 'Formação', fm, 'A situação do curso ainda está marcada para confirmação. Defina antes de publicar.', 'Análise e Desenvolvimento de Sistemas · [instituição] · [concluído em MM/AAAA | previsão MM/AAAA]'));
+
+  const order = { alta: 0, media: 1, baixa: 2 };
+  items.sort((a, b) => order[a.prio] - order[b.prio]);
+
+  // Aderência à vaga
+  const job = $('#job').value.trim();
+  let fit = null;
+  if (job) {
+    const found = TERMS.filter(t => termRe(t).test(job));
+    fit = { ok: [], confirm: [] };
+    found.forEach(t => (termRe(t).test(text) ? fit.ok : fit.confirm).push(t));
+  }
+  return { items, fit };
+}
+
+function itemCard(i, rank, full) {
+  const label = { alta: 'Prioridade alta', media: 'Prioridade média', baixa: 'Prioridade baixa' };
+  return `<div class="card">
+    <div class="prio ${i.prio}">${rank ? rank + '. ' : ''}${label[i.prio]} · ${esc(i.area)}</div>
+    ${full ? `<div class="hint">Trecho original</div><blockquote>${esc(i.original)}</blockquote>` : ''}
+    <p class="small"><strong>Problema:</strong> ${esc(i.problem)}</p>
+    <div class="hint">Versão sugerida</div>
+    <pre class="sug">${esc(i.suggestion)}</pre>
+    <button type="button" class="copy" data-text="${esc(i.suggestion)}">Copiar sugestão</button>
+  </div>`;
+}
+
+function renderResults(res) {
+  const area = $('#areaRole').value.trim();
+  let html = `<p class="rule-note">Análise por regras de palavras-chave, sem IA. Objetivo: <strong>${esc(GOALS[goal].label)}</strong>${area ? ' · Área: <strong>' + esc(area) + '</strong>' : ''}. Nenhum dado é enviado para fora do navegador.</p>`;
+
+  if (!res.items.length) {
+    html += `<p class="small">Nenhum ajuste encontrado pelas regras. Confira o texto manualmente.</p>`;
+  } else {
+    html += `<div class="res-title">As 3 melhorias mais importantes</div>`;
+    res.items.slice(0, 3).forEach((i, n) => { html += itemCard(i, n + 1, false); });
+  }
+
+  html += `<details class="fold" style="margin-top:16px"><summary>Ver todos os detalhes</summary><div class="fold-body">`;
+  res.items.forEach(i => { html += itemCard(i, null, true); });
+  if (res.fit) {
+    html += `<div class="card"><div class="prio">Aderência à vaga colada</div>`;
+    html += res.fit.ok.length
+      ? `<p class="small"><strong>Com evidência no texto:</strong></p><ul>${res.fit.ok.map(t => `<li>${esc(t)}</li>`).join('')}</ul>`
+      : `<p class="small">Nenhum requisito da lista de termos aparece no texto analisado.</p>`;
+    html += res.fit.confirm.length
+      ? `<p class="small"><strong>Precisam ser confirmados ou incluídos no perfil:</strong></p><ul>${res.fit.confirm.map(t => `<li>${esc(t)}</li>`).join('')}</ul>`
+      : '';
+    html += `<p class="hint">A lista de termos é fixa e cobre só alguns requisitos; a vaga pode ter outros.</p></div>`;
+  }
+  html += `</div></details>`;
+  $('#results').innerHTML = html;
+}
+
+function runAnalysis() {
+  const btn = $('#analyze');
+  const text = $('#reviewText').value.trim();
+  $('#results').innerHTML = '';
+  if (!text) {
+    setState('empty', mode === 'pdf' && !pdfReady
+      ? 'Envie um PDF com texto ou cole o conteúdo do perfil antes de analisar.'
+      : 'Campo vazio: cole o texto do perfil, use "Usar meu perfil salvo" ou envie um PDF.');
+    return;
+  }
+  setState('', '');
+  btn.disabled = true; btn.textContent = 'Analisando...';
+  try { renderResults(analyze(text, goal)); }
+  finally { btn.disabled = false; btn.textContent = 'Analisar perfil'; }
+}
+
+/* ============ MODO DE ENTRADA ============ */
+function setMode(m) {
+  mode = m;
+  document.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === m)));
+  $('#pdfPanel').classList.toggle('hidden', m !== 'pdf');
+  $('#srcHint').textContent = m === 'pdf'
+    ? 'O texto é extraído no navegador e nada é enviado. PDFs escaneados não têm texto extraível.'
+    : '';
+  if (m === 'paste') { $('#reviewText').value = ''; pdfReady = false; }
+  refreshReview();
+  setState('', '');
+}
+
+function refreshReview() {
+  const show = mode === 'paste' || (mode === 'pdf' && pdfReady);
+  $('#reviewBlock').classList.toggle('hidden', !show);
+  $('#reviewTitle').textContent = mode === 'pdf' ? 'Texto extraído · revise antes de analisar' : 'Texto do perfil';
+}
+
+function setPdfCard(kind, name, sub) {
+  const icon = $('#dropIcon');
+  icon.className = 'drop-icon' + (kind === 'ok' ? ' ok' : '');
+  icon.textContent = kind === 'ok' ? '✓' : 'PDF';
+  $('#pdfName').textContent = name;
+  $('#pdfSub').textContent = sub;
+}
+
+/* ============ PDF ============ */
+let pdfLibPromise = null;
+function loadPdfJs() {
+  if (!pdfLibPromise) {
+    pdfLibPromise = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = PDFJS_BASE + 'pdf.min.js';
+      s.onload = () => {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_BASE + 'pdf.worker.min.js';
+        resolve(window.pdfjsLib);
+      };
+      s.onerror = () => { pdfLibPromise = null; reject(new Error('pdfjs-load')); };
+      document.head.appendChild(s);
+    });
+  }
+  return pdfLibPromise;
+}
+
+async function loadPdf(file) {
+  pdfReady = false;
+  $('#reviewText').value = '';
+  $('#results').innerHTML = '';
+  refreshReview();
+  if (!file) { setPdfCard('', 'Nenhum arquivo selecionado', 'Clique para escolher o arquivo'); return; }
+  setPdfCard('', file.name, 'Lendo o PDF…');
+
+  const isPdfName = /\.pdf$/i.test(file.name);
+  if (!isPdfName && file.type !== 'application/pdf') {
+    setPdfCard('', file.name, 'Clique para trocar o arquivo');
+    setState('err', 'PDF inválido: envie um arquivo .pdf.');
+    return;
+  }
+  let buf;
+  try { buf = await file.arrayBuffer(); }
+  catch (_) { setPdfCard('', file.name, 'Clique para trocar o arquivo'); setState('err', 'Não consegui ler o arquivo. Tente novamente ou cole o texto.'); return; }
+
+  const magic = String.fromCharCode(...new Uint8Array(buf, 0, 5));
+  if (magic !== '%PDF-') {
+    setPdfCard('', file.name, 'Clique para trocar o arquivo');
+    setState('err', 'PDF inválido: o arquivo não tem a estrutura de um PDF. Use "Colar texto".');
+    return;
+  }
+
+  let lib;
+  try { lib = await loadPdfJs(); }
+  catch (_) { setPdfCard('', file.name, 'Clique para trocar o arquivo'); setState('err', 'Não consegui carregar o leitor de PDF. Use "Colar texto".'); return; }
+
+  try {
+    const doc = await lib.getDocument({ data: buf }).promise;
+    let txt = '';
+    for (let p = 1; p <= doc.numPages; p++) {
+      const page = await doc.getPage(p);
+      const content = await page.getTextContent();
+      txt += content.items.map(i => i.str).join(' ') + '\n\n';
+    }
+    txt = txt.replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
+    if (txt.length < 30) {
+      setPdfCard('', file.name, 'Clique para trocar o arquivo');
+      setState('err', 'Não encontrei texto neste PDF. Ele pode ser escaneado. Use "Colar texto".');
+      return;
+    }
+    $('#reviewText').value = txt;
+    pdfReady = true;
+    setPdfCard('ok', file.name, 'Clique para trocar o arquivo');
+    refreshReview();
+    setState('ok', 'Texto extraído. Revise abaixo antes de analisar.');
+  } catch (_) {
+    setPdfCard('', file.name, 'Clique para trocar o arquivo');
+    setState('err', 'PDF inválido ou protegido por senha. Verifique o arquivo ou use "Colar texto".');
+  }
+}
+
+/* ============ ENTREVISTA ============ */
+function renderQuestion() {
+  const qs = QUESTIONS[goal];
+  $('#qCount').textContent = `Pergunta ${qIndex + 1} de ${qs.length} · ${GOALS[goal].label}`;
+  $('#qText').textContent = qs[qIndex];
+  $('#answer').value = answers[qIndex] || '';
+  $('#prevQ').disabled = qIndex === 0;
+  $('#nextQ').disabled = qIndex >= qs.length - 1;
+}
+
+function saveCurrent() { answers[qIndex] = $('#answer').value; }
+
+function feedbackFor(ans, g) {
+  const a = ans.trim();
+  const clear = [], missing = [];
+  if (a.length >= 150) clear.push('Resposta com contexto suficiente.');
+  else missing.push('Resposta curta: acrescente contexto (onde, quando, com quem).');
+
+  if (/\b(eu|fiz|conduzi|implementei|desenvolvi|resolvi|atuei|participei)\b/i.test(a)) clear.push('Deixou claro o seu papel.');
+  else missing.push('Não ficou claro o que você fez pessoalmente.');
+
+  if (/\b(decid|escolh|optei|porque|motivo|pois|por causa)/i.test(a)) clear.push('Explicou o motivo de uma decisão.');
+  else missing.push('Faltou explicar por que escolheu esta solução.');
+
+  if (/\d|reduz|aument|melhor|evit|diminu|entreg|resolv/i.test(a)) clear.push('Citou algum resultado ou efeito.');
+  else missing.push('Faltou comprovar o resultado: use apenas dados que você consegue demonstrar.');
+
+  const techRe = g === 'telecom'
+    ? /dwdm|backbone|r[aá]dio|preventiva|corretiva|alarme|campo|O&M|equipamento/i
+    : /react|next|node|typescript|javascript|postgres|supabase|api|banco|deploy|teste/i;
+  if (techRe.test(a)) clear.push('Citou ferramentas, equipamentos ou tecnologias concretas.');
+  else missing.push('Não citou ferramentas, equipamentos ou tecnologias concretas.');
+
+  return { clear, missing };
+}
+
+function finishRound() {
+  saveCurrent();
+  const qs = QUESTIONS[goal];
+  const answered = qs.map((q, i) => ({ q, a: (answers[i] || '').trim(), i })).filter(x => x.a);
+  const box = $('#feedback');
+  if (!answered.length) {
+    box.innerHTML = '<div class="state empty">Responda pelo menos uma pergunta para ver o feedback.</div>';
+    return;
+  }
+  let html = '<div class="state ok">Feedback por regras de estrutura (sem IA). Ele avalia a organização da resposta, não a veracidade dos fatos.</div>';
+  answered.forEach(x => {
+    const f = feedbackFor(x.a, goal);
+    html += `<div class="fb">
+      <div class="prio">Pergunta ${x.i + 1}</div>
+      <p class="small"><strong>${esc(x.q)}</strong></p>
+      <p class="small"><strong>Ficou claro:</strong></p>
+      <ul>${f.clear.length ? f.clear.map(c => `<li>${esc(c)}</li>`).join('') : '<li>—</li>'}</ul>
+      <p class="small"><strong>Faltou comprovar:</strong></p>
+      <ul>${f.missing.length ? f.missing.map(c => `<li>${esc(c)}</li>`).join('') : '<li>Nada apontado.</li>'}</ul>
+    </div>`;
+  });
+  html += `<div class="fb"><div class="prio">Como estruturar</div>
+    <ol class="small" style="padding-left:20px">
+      <li>Contexto: onde e quando aconteceu.</li>
+      <li>Seu papel: o que você fez pessoalmente.</li>
+      <li>Decisão: a escolha e o motivo.</li>
+      <li>Resultado: só o que pode comprovar. Se não houver números, descreva o que observou.</li>
+      <li>Aprendizado: o que faria diferente.</li>
+    </ol>
+    <p class="hint">Preencha com fatos reais. Modelo, não conteúdo pronto.</p></div>`;
+  box.innerHTML = html;
+}
+
+/* ============ EVENTOS ============ */
+function showView(v) {
+  document.querySelectorAll('[data-tab]').forEach(x => x.setAttribute('aria-selected', String(x.dataset.tab === v)));
+  $('#view-linkedin').classList.toggle('hidden', v !== 'linkedin');
+  $('#view-entrevista').classList.toggle('hidden', v !== 'entrevista');
+}
+document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => showView(b.dataset.tab)));
+
+document.querySelectorAll('[data-goal]').forEach(b => b.addEventListener('click', () => setGoal(b.dataset.goal, true)));
+document.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+
+$('#targetRole').addEventListener('input', e => {
+  const v = e.target.value;
+  if (v.trim()) setGoal(/telecom|o&m/i.test(v) ? 'telecom' : 'fullstack', false);
+});
+
+$('#useProfile').addEventListener('click', () => {
+  setMode('paste');
+  $('#reviewText').value = profileAsText();
+  setState('ok', 'Perfil carregado no campo. Revise o texto e clique em Analisar perfil.');
+});
+
+$('#p-formacao').addEventListener('input', updateFormHint);
+$('#pdfFile').addEventListener('change', e => loadPdf(e.target.files[0]));
+$('#analyze').addEventListener('click', runAnalysis);
+$('#resetProfile').addEventListener('click', () => {
+  if (confirm('Restaurar o perfil inicial? As edições atuais serão perdidas.')) fillProfile(PROFILE_DEFAULT);
+});
+
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.copy[data-text]');
+  if (btn) {
+    copyText(btn.dataset.text).then(() => {
+      const old = btn.textContent; btn.textContent = 'Copiado'; setTimeout(() => btn.textContent = old, 1200);
+    });
+  }
+});
+
+$('#nextQ').addEventListener('click', () => { saveCurrent(); qIndex = Math.min(qIndex + 1, QUESTIONS[goal].length - 1); renderQuestion(); });
+$('#prevQ').addEventListener('click', () => { saveCurrent(); qIndex = Math.max(qIndex - 1, 0); renderQuestion(); });
+$('#finish').addEventListener('click', finishRound);
+
+/* ============ INÍCIO ============ */
+fillProfile(PROFILE_DEFAULT);
+setMode('paste');
+setGoal('fullstack', true);
+showView('linkedin');
+</script>
+</body>
+</html>

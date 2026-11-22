@@ -1,0 +1,13 @@
+# Dados pessoais e de terceiros: nunca versionar
+*.pdf
+*.xlsx
+*.xls
+*.csv
+*.env
+.env.*
+*.key
+*.pem
+credentials*.json
+perfil.local.*
+.DS_Store
+node_modules/
