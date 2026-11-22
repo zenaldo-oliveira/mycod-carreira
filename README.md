@@ -31,8 +31,9 @@ O botão **Usar meu perfil salvo** carrega um perfil **fictício** (`Ana Exemplo
 ## Estrutura
 
 ```
-index.html          aplicação completa (HTML, CSS e JavaScript)
-vendor/pdfjs/       pdf.js 3.11.174 (Apache-2.0), leitor de PDF local
+index.html          aplicação completa (HTML, CSS e JavaScript).
+                    O leitor de PDF (pdf.js 3.11.174, Apache-2.0) já vem embutido no arquivo.
+vendor/pdfjs/       cópia de referência do pdf.js e licença (não é carregada pelo index.html)
 ```
 
 ## Privacidade
